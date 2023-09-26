@@ -13,5 +13,5 @@ func Logger() {
 	config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	config.EncoderConfig.ConsoleSeparator = "\n"
 	globalsLogger, _ := config.Build()
-	zap.ReplaceGlobals(globalsLogger) // 替换zap.s()为全局logger。
+	zap.ReplaceGlobals(globalsLogger) // Replace zap. s() as the global logger.
 }

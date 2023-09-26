@@ -1,9 +1,17 @@
 package main
 
-
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"longmen-gateway/initialize"
+)
 
 func main() {
+	initialize.Logger()
+
+	initialize.InitConfig()
+
+	initialize.InitMysql()
+
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{

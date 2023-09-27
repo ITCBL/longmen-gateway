@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"encoding/json"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"os"
@@ -16,25 +17,31 @@ func GetEnvInfo(env string) bool {
 func InitConfig() {
 	local := os.Getenv("local")
 	if local != "false" {
-		configFileName := "config/config-dev.yaml"
+		configFilePath := "config/config-dev.yaml"
 		v := viper.New()
-		//文件的路径如何设置
-		v.SetConfigFile(configFileName)
+		v.SetConfigFile(configFilePath)
 		if err := v.ReadInConfig(); err != nil {
 			panic(err)
 		}
-		//这个对象如何在其他文件中使用 - 全局变量
+		// Using configuration information through global variables
 		if err := v.Unmarshal(global.ServerConfig); err != nil {
 			panic(err)
 		}
 	} else {
-		// 从环境变量中获取
+		// Obtain configuration information from the running environment
 		global.ServerConfig.Port = os.Getenv("app_port")
 		global.ServerConfig.MysqlConfig.Host = os.Getenv("mysql_host")
 		global.ServerConfig.MysqlConfig.Port = os.Getenv("mysql_port")
 		global.ServerConfig.MysqlConfig.Name = os.Getenv("mysql_name")
 		global.ServerConfig.MysqlConfig.User = os.Getenv("mysql_user")
 		global.ServerConfig.MysqlConfig.Password = os.Getenv("mysql_password")
+		// ......
 	}
-	zap.S().Infof("配置信息: %v", global.ServerConfig)
+
+	marshal, err := json.Marshal(global.ServerConfig)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	zap.S().Infof("[System configuration information]:\n %v", string(marshal))
 }

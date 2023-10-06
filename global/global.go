@@ -11,7 +11,6 @@ var (
 	DB         *gorm.DB
 	ServerInfo *config.ServerConfig = &config.ServerConfig{}
 	Trans      ut.Translator
-	//MongoClient  *qmgo.Database
 )
 
 const (

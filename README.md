@@ -17,6 +17,7 @@
 ## 运行
 - 执行`git pull` 拉取最新代码
 - 执行`go mod tidy` 下载依赖包
+- 修改配置文件 `config/config-dev.yaml` 配置文件
 - 执行`go run main.go` 启动程序
 
 ## 部署

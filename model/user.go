@@ -1,6 +1,14 @@
 package model
 
-import "time"
+import (
+	"crypto/sha512"
+	"fmt"
+	"github.com/anaskhan96/go-password-encoder"
+	"gopkg.in/errgo.v2/errors"
+	"longmen-gateway/global"
+	"strings"
+	"time"
+)
 
 type User struct {
 	BaseModel
@@ -15,4 +23,57 @@ type User struct {
 
 func (t *User) TableName() string {
 	return "user"
+}
+
+func (t *User) GetUserByMobile(mobile string) (*User, error) {
+	var user User
+
+	result := global.DB.Where(&User{Mobile: mobile}).First(&user)
+	if result.RowsAffected == 0 {
+		return nil, errors.New("Not Found!")
+	}
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &user, nil
+
+}
+
+// 密码加密
+var options = &password.Options{
+	SaltLen:      16,
+	Iterations:   100,
+	KeyLen:       32,
+	HashFunction: sha512.New,
+}
+
+func (t *User) CheckPassword(loginPassword, encryptedPassword string) (bool, error) {
+	passwordInfo := strings.Split(encryptedPassword, "$")
+	check := password.Verify(loginPassword, passwordInfo[2], passwordInfo[3], options)
+	return check, nil
+}
+
+func (t *User) CreateUser(mobile, pwd, NickName string) (*User, error) {
+	var user User
+	result := global.DB.Where(&User{Mobile: mobile}).First(&user)
+	if result.RowsAffected == 1 {
+		return nil, errors.New("用户已存在")
+	}
+	user.Mobile = mobile
+	user.NickName = NickName
+	user.Password = PasswordEncryption(pwd) // 密码加密
+
+	// 入库
+	result = global.DB.Create(&user)
+	if result.Error != nil {
+		return nil, errors.New("创建用户失败")
+	}
+	return &user, nil
+}
+
+func PasswordEncryption(PassWord string) string {
+	salt, encoderPwd := password.Encode(PassWord, options)
+	newPassword := fmt.Sprintf("$pbkdf2--sha512$%s$%s", salt, encoderPwd) // 新密码=加密算法+盐值+原密码密文
+	return newPassword
 }

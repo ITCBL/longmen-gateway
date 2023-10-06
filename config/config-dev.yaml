@@ -6,3 +6,6 @@ mysql:
   db: "longmen-gateway"
   user: "root"
   password: "123456"
+
+log:
+  enable_success_response_log: false

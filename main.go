@@ -15,10 +15,10 @@ func main() {
 
 	routers := initialize.InitRouters()
 
-	if err := initialize.InitTrans("zh"); err != nil {
-		panic(err)
-	}
+	initialize.InitTrans("zh") // 翻译器
 
-	port := fmt.Sprintf(":%s", global.ServerConfig.Port)
-	routers.Run(port) // 监听并在 0.0.0.0:8080 上启动服务
+	initialize.RegisterValidation() // 注册验证器
+
+	port := fmt.Sprintf(":%s", global.ServerInfo.Port)
+	routers.Run(port) // 监听并启动服务 todo 后续需要启动两个端口，区分manager和proxy
 }

@@ -15,7 +15,7 @@ import (
 )
 
 func InitMysql() {
-	mysqlConfig := global.ServerConfig.MysqlConfig
+	mysqlConfig := global.ServerInfo.MysqlInfo
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", mysqlConfig.User, mysqlConfig.Password, mysqlConfig.Host, mysqlConfig.Port, mysqlConfig.Name)
 	zap.S().Debug("dsn:  ", dsn)
 	newLogger := logger.New(
@@ -24,15 +24,14 @@ func InitMysql() {
 			SlowThreshold:             time.Second,
 			LogLevel:                  logger.Info,
 			IgnoreRecordNotFoundError: true,
-			Colorful:                  true, // Disable color printing
+			Colorful:                  true, // 禁用彩色打印
 		},
 	)
 
 	var err error
-	// global
+
 	global.DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
-		// Custom table name
-		NamingStrategy: schema.NamingStrategy{
+		NamingStrategy: schema.NamingStrategy{ // 自定义表名称
 			TablePrefix:   "",
 			SingularTable: true,
 			NameReplacer:  nil,

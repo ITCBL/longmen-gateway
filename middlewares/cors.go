@@ -14,7 +14,7 @@ func Cors() gin.HandlerFunc {
 		ctx.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type")
 		ctx.Header("Access-Control-Allow-Credentials", "true")
 
-		// No content returned, only status code returned
+		// 未返回任何内容，仅返回状态代码
 		if method == "" {
 			ctx.AbortWithStatus(http.StatusNoContent)
 		}

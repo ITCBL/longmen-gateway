@@ -13,7 +13,8 @@ func InitRouters() *gin.Engine {
 	Router.Use()
 	ApiGroup := Router.Group("/api/v1")
 	Router.NoRoute(NoRouteHandles)
-	router.ManagerRouter(ApiGroup)
+	router.ManagerRouter(ApiGroup) // Manager
+	router.GatewayRouter(ApiGroup) // Gateway
 	return Router
 }
 

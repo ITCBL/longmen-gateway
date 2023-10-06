@@ -8,8 +8,14 @@ import (
 )
 
 var (
-	DB           *gorm.DB
-	ServerConfig *config.ServerConfig = &config.ServerConfig{}
-	Trans        ut.Translator
+	DB         *gorm.DB
+	ServerInfo *config.ServerConfig = &config.ServerConfig{}
+	Trans      ut.Translator
 	//MongoClient  *qmgo.Database
+)
+
+const (
+	UserSessionKey         = "UserSessionKey"
+	Issuer                 = "longmen-gateway"
+	JwtTokenExpirationTime = 60 * 60 * 24 * 30
 )

@@ -23,22 +23,20 @@ func InitConfig() {
 		if err := v.ReadInConfig(); err != nil {
 			panic(err)
 		}
-		// Using configuration information through global variables
-		if err := v.Unmarshal(global.ServerConfig); err != nil {
+		if err := v.Unmarshal(global.ServerInfo); err != nil { // 通过全局变量使用配置信息
 			panic(err)
 		}
 	} else {
-		// Obtain configuration information from the running environment
-		global.ServerConfig.Port = os.Getenv("app_port")
-		global.ServerConfig.MysqlConfig.Host = os.Getenv("mysql_host")
-		global.ServerConfig.MysqlConfig.Port = os.Getenv("mysql_port")
-		global.ServerConfig.MysqlConfig.Name = os.Getenv("mysql_name")
-		global.ServerConfig.MysqlConfig.User = os.Getenv("mysql_user")
-		global.ServerConfig.MysqlConfig.Password = os.Getenv("mysql_password")
+		global.ServerInfo.Port = os.Getenv("app_port") // 从运行环境中获取配置信息
+		global.ServerInfo.MysqlInfo.Host = os.Getenv("mysql_host")
+		global.ServerInfo.MysqlInfo.Port = os.Getenv("mysql_port")
+		global.ServerInfo.MysqlInfo.Name = os.Getenv("mysql_name")
+		global.ServerInfo.MysqlInfo.User = os.Getenv("mysql_user")
+		global.ServerInfo.MysqlInfo.Password = os.Getenv("mysql_password")
 		// ......
 	}
 
-	marshal, err := json.Marshal(global.ServerConfig)
+	marshal, err := json.Marshal(global.ServerInfo)
 	if err != nil {
 		panic(err.Error())
 	}

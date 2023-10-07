@@ -31,7 +31,7 @@ func ErrorResponse(ctx *gin.Context, code ResponseCode, err error) {
 
 	response, _ := json.Marshal(resp)
 	defer zap.S().Error(string(response))
-	ctx.Abort()
+	//ctx.Abort() // 后续会在响应后，会通过中间件记录某些信息，暂时注释ctx.Abort()
 }
 
 // RemoveTopStruct 美化参数校验提示信息

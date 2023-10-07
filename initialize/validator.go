@@ -10,8 +10,8 @@ import (
 	en_translations "github.com/go-playground/validator/v10/translations/en"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
 	"longmen-gateway/global"
-	myValidator "longmen-gateway/validator"
 	"reflect"
+	"regexp"
 	"strings"
 )
 
@@ -52,7 +52,7 @@ func InitTrans(locale string) {
 // RegisterValidation 自定义验证器
 func RegisterValidation() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterValidation("valid_mobile", myValidator.ValidateMobile)
+		v.RegisterValidation("valid_mobile", ValidateMobile)
 		_ = v.RegisterTranslation("valid_mobile", global.Trans, func(ut ut.Translator) error {
 			return ut.Add("valid_mobile", "{0} 非法的手机号码!", true)
 		}, func(ut ut.Translator, fe validator.FieldError) string {
@@ -60,4 +60,14 @@ func RegisterValidation() {
 			return t
 		})
 	}
+}
+
+func ValidateMobile(fl validator.FieldLevel) bool {
+	mobile := fl.Field().String()
+	// 使用正则表达式判断是否合法
+	ok, _ := regexp.MatchString(`^1([38][0-9]|14[579]|5[^4]|16[6]|7[1-35-8]|9[189])\d{8}$`, mobile)
+	if !ok {
+		return false
+	}
+	return true
 }

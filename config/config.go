@@ -25,6 +25,7 @@ type RedisConfig struct {
 type JWTConfig struct {
 	SigningKey string `mapstructure:"key" json:"key"`
 }
+
 type LogConfig struct {
 	EnableSuccessResponseLog bool `mapstructure:"enable_success_response_log" json:"enable_success_response_log"`
 }

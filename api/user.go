@@ -15,6 +15,7 @@ import (
 type UserApi struct{}
 
 func (u *UserApi) Login(ctx *gin.Context) {
+
 	params := &dto.UserLoginRequestParams{}
 	if err := ctx.ShouldBindJSON(params); err != nil {
 		middlewares.ErrorResponse(ctx, http.StatusBadRequest, err)
@@ -68,7 +69,7 @@ func (u *UserApi) Register(ctx *gin.Context) {
 		return
 	}
 
-	// 验证码 todo 需要到短信平台开通，本功能暂时略过
+	// 验证码 todo 需要开通短信服务，本功能暂时略过
 
 	var user model.User
 
